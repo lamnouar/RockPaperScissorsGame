@@ -1,11 +1,14 @@
 ﻿using RockPaperScissorsGame.Enums;
+using RockPaperScissorsGame.Services.Interfaces;
 using System.Linq;
 
-namespace RockPaperScissorsGame.Services
+namespace RockPaperScissorsGame.Services.Implementations
 {
     public class ComputerStandardPlayingStyle : ComputerRandomPlayingStyleService, IPlayingStyleService
     {
-        private readonly IParametres _parameters;
+        private readonly IParameters _parameters;
+
+        public override PlayerStyle PlayerStyle { get; protected set; } = PlayerStyle.ComputerStandardStyle;
         public override Choice GetCurrentSelection(Choice? previousChoice = null)
         {
             if (previousChoice is null)

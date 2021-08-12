@@ -1,9 +1,9 @@
 ﻿using RockPaperScissorsGame.Dtos;
 using System.Collections.Generic;
 
-namespace RockPaperScissorsGame.Services
+namespace RockPaperScissorsGame.Services.Interfaces
 {
-    public interface IParametres
+    public interface IParameters
     {
         public IList<ChoiceCaracteristics> ChoiceCaracteristics { get;  }
     }

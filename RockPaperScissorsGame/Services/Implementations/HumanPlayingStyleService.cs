@@ -1,12 +1,15 @@
 ﻿using RockPaperScissorsGame.Enums;
 using RockPaperScissorsGame.Helpers;
+using RockPaperScissorsGame.Services.Interfaces;
 using System;
-using System.Collections;
 
-namespace RockPaperScissorsGame.Services
+namespace RockPaperScissorsGame.Services.Implementations
 {
-    public class PersonPlayingStyleService : IPlayingStyleService
+    public class HumanPlayingStyleService : IPlayingStyleService
     {
+        public  PlayerStyle PlayerStyle { get; protected set; } = PlayerStyle.HumanStyle;
+
+
         public Choice GetCurrentSelection(Choice? previousChoice = null)
         {
             Console.WriteLine("Press the number associated to your choice please!");
@@ -19,19 +22,11 @@ namespace RockPaperScissorsGame.Services
 
             var choiceAsString = Console.ReadLine();
 
-            if (!int.TryParse(choiceAsString, out int choiceAsInt) || !DoesSelectedItemBelongToAvailableChoices(choiceAsInt))
+            if (!int.TryParse(choiceAsString, out int choiceAsInt) || !Enum.TryParse(choiceAsInt.ToString(), out Choice _))
                 GetCurrentSelection();
 
 
             return EnumHelper.GetValue<Choice>(choiceAsInt);
-        }
-
-        private bool DoesSelectedItemBelongToAvailableChoices(int selectedItem)
-        {
-            var enumType = typeof(Choice);
-            var enumValues = new ArrayList(enumType.GetEnumValues());
-
-            return enumValues.Contains(selectedItem);
         }
     }
 }

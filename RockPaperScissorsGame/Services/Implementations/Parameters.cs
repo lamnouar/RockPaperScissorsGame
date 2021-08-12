@@ -1,14 +1,15 @@
 ﻿using RockPaperScissorsGame.Dtos;
 using RockPaperScissorsGame.Enums;
+using RockPaperScissorsGame.Services.Interfaces;
 using System.Collections.Generic;
 
-namespace RockPaperScissorsGame.Services
+namespace RockPaperScissorsGame.Services.Implementations
 {
-    public class Parametres : IParametres
+    public class Parameters : IParameters
     {
         public IList<ChoiceCaracteristics> ChoiceCaracteristics { get; private set; } = new List<ChoiceCaracteristics>();
 
-        public Parametres()
+        public Parameters()
         {
             InitializeChoices();
         }

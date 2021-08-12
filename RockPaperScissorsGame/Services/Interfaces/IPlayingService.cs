@@ -1,4 +1,4 @@
-﻿namespace RockPaperScissorsGame.Services
+﻿namespace RockPaperScissorsGame.Services.Interfaces
 {
     public interface IPlayingService
     {
