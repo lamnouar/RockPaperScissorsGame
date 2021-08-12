@@ -1,20 +1,20 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using RockPaperScissorsGame.Enums;
+﻿using RockPaperScissorsGame.Enums;
 using RockPaperScissorsGame.Services.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RockPaperScissorsGame.Dtos
 {
     public class Player
     {
-        private IPlayingStyleService _playingStyleService;
+        private readonly IPlayingStyleService _playingStyleService;
         private readonly PlayerStyle _playerStyle;
 
         public string Name { get; set; }
         public int Score { get; set; }
         public Choice CurrentSelection { get; protected set; }
         public Queue<Choice> PreviousSelections { get; set; } = new Queue<Choice>();
-
 
         public Player(string name, PlayerStyle playerStyle, IPlayingStyleFactory playingStyleFactory)
         {
@@ -25,7 +25,7 @@ namespace RockPaperScissorsGame.Dtos
 
         public void Play()
         {
-            CurrentSelection = _playingStyleService.GetCurrentSelection();
+            CurrentSelection = PreviousSelections.Any() ? _playingStyleService.GetCurrentSelection(PreviousSelections.Last()) : _playingStyleService.GetCurrentSelection();
             PreviousSelections.Enqueue(CurrentSelection);
         }
 

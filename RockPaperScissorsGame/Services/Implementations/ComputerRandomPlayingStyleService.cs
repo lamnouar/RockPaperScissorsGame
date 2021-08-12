@@ -8,7 +8,6 @@ namespace RockPaperScissorsGame.Services.Implementations
     {
         private readonly Random _random = new Random();
 
-
         public virtual PlayerStyle PlayerStyle { get; protected set; } = PlayerStyle.ComputerRandomStyle;
 
         public virtual Choice GetCurrentSelection(Choice? previousChoice = null)

@@ -7,7 +7,7 @@ namespace RockPaperScissorsGame
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var host = CreateHostBuilder().ConfigureServices((hostContext, services) =>
             {
