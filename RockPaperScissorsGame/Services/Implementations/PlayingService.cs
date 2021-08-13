@@ -22,30 +22,24 @@ namespace RockPaperScissorsGame.Services.Implementations
 
         public void InitializePlayers()
         {
-            Console.WriteLine(Messages.MODE_SELECTION);
-            Console.WriteLine(Messages.SINGLE_PLAYER_MODE);
-            Console.WriteLine(Messages.MULTIPLAYER_MODE);
+            DisplayPlayingMode();
 
             var selectedModeAsString = Console.ReadLine();
             if (!int.TryParse(selectedModeAsString, out int selectedMode) || (selectedMode != 1 && selectedMode != 2))
                 InitializePlayers();
 
-            Console.WriteLine(string.Format(Messages.ENTER_PLAYER_NAME, 1));
-            var playerName1 = Console.ReadLine();
+            InitializePlayerOne();
 
-            _playerOne = new Player(playerName1, Enums.PlayerStyle.HumanStyle, _playingStyleFactory);
+            InitializePlayerTwo(selectedMode);
+        }
 
-            if (selectedMode == 1)
-            {
-                _playerTwo = new Player("Computer", Enums.PlayerStyle.ComputerStandardStyle, _playingStyleFactory);
-            }
-            else
-            {
-                Console.WriteLine(string.Format(Messages.ENTER_PLAYER_NAME, 2));
-                var playerName2 = Console.ReadLine();
 
-                _playerTwo = new Player(playerName2, Enums.PlayerStyle.HumanStyle, _playingStyleFactory);
-            }
+
+        private static void DisplayPlayingMode()
+        {
+            Console.WriteLine(Messages.MODE_SELECTION);
+            Console.WriteLine(Messages.SINGLE_PLAYER_MODE);
+            Console.WriteLine(Messages.MULTIPLAYER_MODE);
         }
 
         public void Play()
@@ -55,22 +49,9 @@ namespace RockPaperScissorsGame.Services.Implementations
 
             while (players.All(x => x.Score < 3))
             {
-                Console.WriteLine($"Round {round}");
-
-                while (_playerOne.CurrentSelection == _playerTwo.CurrentSelection)
-                    foreach (var player in players)
-                    {
-                        Console.WriteLine($"Player: {player.Name}");
-                        player.Play();
-                    }
-
-                if (_parameters.ChoiceCaracteristics.Single(x => x.Choice == _playerOne.CurrentSelection).LoseAgainst.Contains(_playerTwo.CurrentSelection))
-                    _playerTwo.Score++;
-                else
-                    _playerOne.Score++;
-
-                Console.WriteLine($"Round {round} choices => {_playerOne.Name}({_playerOne.CurrentSelection}) - {_playerTwo.Name}({_playerTwo.CurrentSelection})");
-                Console.WriteLine($"Round {round} score => {_playerOne.Name}({_playerOne.Score}) - {_playerTwo.Name}({_playerTwo.Score})");
+                Console.WriteLine(string.Format(Messages.CURRENT_ROUND, round));
+                PlayRound(players);
+                DisplayRoundResult(round);
 
                 foreach (var player in players)
                     player.InitializeSelection();
@@ -78,10 +59,57 @@ namespace RockPaperScissorsGame.Services.Implementations
                 round++;
             }
 
+            DisplayFinalResult(players);
+        }
+
+        private void DisplayRoundResult(int round)
+        {
+            Console.WriteLine(string.Format(Messages.ROUND_CHOICES, round, _playerOne.Name, _playerOne.CurrentSelection, _playerTwo.Name, _playerTwo.CurrentSelection));
+            Console.WriteLine(string.Format(Messages.ROUND_SCORE, round, _playerOne.Name, _playerOne.Score, _playerTwo.Name, _playerTwo.Score));
+        }
+
+        private void PlayRound(Player[] players)
+        {
+            while (_playerOne.CurrentSelection == _playerTwo.CurrentSelection)
+                foreach (var player in players)
+                {
+                    Console.WriteLine(string.Format(Messages.PLAYER_NAME, player.Name));
+                    player.Play();
+                }
+
+            if (_parameters.ChoiceCaracteristics.Single(x => x.Choice == _playerOne.CurrentSelection).LoseAgainst.Contains(_playerTwo.CurrentSelection))
+                _playerTwo.Score++;
+            else
+                _playerOne.Score++;
+        }
+
+        private void DisplayFinalResult(Player[] players)
+        {
             var winner = players.Single(x => x.Score == 3);
 
-            Console.WriteLine($"Final score => {_playerOne.Name} {_playerOne.Score} - {_playerTwo.Name} {_playerTwo.Score}");
-            Console.WriteLine($"The winner is {winner.Name}");
+            Console.WriteLine(string.Format(Messages.FINAL_SCORE, _playerOne.Name, _playerOne.Score, _playerTwo.Name, _playerTwo.Score));
+            Console.WriteLine(string.Format(Messages.GAME_WINNER, winner.Name));
+        }
+
+        private void InitializePlayerTwo(int selectedMode)
+        {
+            if (selectedMode == 1)
+                _playerTwo = new Player(Messages.COMPUTER_NAME, Enums.PlayerStyle.ComputerRandomStyle, _playingStyleFactory);
+            else
+            {
+                Console.WriteLine(string.Format(Messages.ENTER_PLAYER_NAME, 2));
+                var playerName2 = Console.ReadLine();
+
+                _playerTwo = new Player(playerName2, Enums.PlayerStyle.HumanStyle, _playingStyleFactory);
+            }
+        }
+
+        private void InitializePlayerOne()
+        {
+            Console.WriteLine(string.Format(Messages.ENTER_PLAYER_NAME, 1));
+            var playerName1 = Console.ReadLine();
+
+            _playerOne = new Player(playerName1, Enums.PlayerStyle.HumanStyle, _playingStyleFactory);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using RockPaperScissorsGame.Enums;
+﻿using RockPaperScissorsGame.Constants;
+using RockPaperScissorsGame.Enums;
 using RockPaperScissorsGame.Helpers;
 using RockPaperScissorsGame.Services.Interfaces;
 using System;
@@ -12,7 +13,7 @@ namespace RockPaperScissorsGame.Services.Implementations
 
         public Choice GetCurrentSelection(Choice? previousChoice = null)
         {
-            Console.WriteLine("Press the number associated to your choice please!");
+            Console.WriteLine(Messages.CHOICES_MENU);
             var availableChoices = Enum.GetValues(typeof(Choice));
 
             foreach (var choice in availableChoices)
